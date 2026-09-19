@@ -364,17 +364,20 @@ dependencies {
 `,
   },
   {
-    name: 'build-apk.yml',
-    path: '.github/workflows/build-apk.yml',
+    name: 'release-apk.yml',
+    path: '.github/workflows/release-apk.yml',
     language: 'yaml',
     category: 'ci',
-    description: 'GitHub Actions workflow to automatically build and export PaymentAnnouncer-Debug-APK artifact with JDK 17 on push or workflow_dispatch.',
-    content: `name: Build APK
+    description: 'GitHub Actions workflow that compiles assembleDebug, renames to PaymentAnnouncer.apk, and publishes direct APK on GitHub Releases.',
+    content: `name: Direct APK Release
 
 on:
   push:
     branches: [ "main", "master" ]
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -390,17 +393,30 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Grant Execute Permission for Gradlew
+      - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
       - name: Build Debug APK
         run: ./gradlew assembleDebug
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      # सीधी .apk फ़ाइल का नाम सेट करना
+      - name: Rename APK
+        run: |
+          mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/PaymentAnnouncer.apk
+
+      # GitHub Release बनाना (जहाँ डायरेक्ट APK मिलेगी)
+      - name: Create Release and Upload Direct APK
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'
         with:
-          name: PaymentAnnouncer-Debug-APK
-          path: app/build/outputs/apk/debug/*.apk
+          tag_name: v1.0.\${{ github.run_number }}
+          name: "Payment Announcer v1.0.\${{ github.run_number }}"
+          body: "Direct APK build by MD IRFAN ALAM"
+          draft: false
+          prerelease: false
+          files: app/build/outputs/apk/debug/PaymentAnnouncer.apk
+        env:
+          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
 `,
   },
   {

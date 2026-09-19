@@ -219,11 +219,11 @@ export const AndroidCodeExport: React.FC = () => {
 
         <div className="bg-slate-50 dark:bg-slate-800/50 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700/60">
           <div className="font-bold text-slate-900 dark:text-slate-100 mb-1 flex items-center justify-between">
-            <span>4. Auto APK Build</span>
+            <span>4. Direct APK Release</span>
             <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-semibold">CI/CD</span>
           </div>
           <p className="text-slate-500 dark:text-slate-400 leading-normal">
-            Push code to GitHub with <code className="font-mono text-blue-600 dark:text-blue-400">.github/workflows/build-apk.yml</code>. GitHub Actions will build and upload the debug APK automatically.
+            Push code to GitHub with <code className="font-mono text-blue-600 dark:text-blue-400">.github/workflows/release-apk.yml</code>. GitHub Actions will build, rename to <code className="font-mono text-emerald-600 dark:text-emerald-400">PaymentAnnouncer.apk</code>, and publish a GitHub Release.
           </p>
         </div>
       </div>
