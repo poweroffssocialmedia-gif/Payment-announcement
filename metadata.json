@@ -1,0 +1,7 @@
+{
+  "name": "Payment Announcer",
+  "description": "Merchant payment soundbox and notification listener that announces UPI and card transactions aloud via voice and audio chimes.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
