@@ -11,7 +11,7 @@ import {
 import { ANDROID_FILES, AndroidFile } from '../data/androidProjectCode';
 
 export const AndroidCodeExport: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<'all' | 'java' | 'config' | 'kotlin'>('all');
+  const [selectedCategory, setSelectedCategory] = useState<'all' | 'java' | 'config' | 'ci' | 'kotlin'>('all');
   const [activeFile, setActiveFile] = useState<AndroidFile>(ANDROID_FILES[0]);
   const [copied, setCopied] = useState(false);
 
@@ -116,6 +116,7 @@ export const AndroidCodeExport: React.FC = () => {
               { id: 'all', label: 'All Files' },
               { id: 'java', label: 'Java (Requested)' },
               { id: 'config', label: 'Manifest & Gradle' },
+              { id: 'ci', label: 'GitHub CI/CD' },
               { id: 'kotlin', label: 'Kotlin' },
             ] as const
           ).map((cat) => (
@@ -188,7 +189,7 @@ export const AndroidCodeExport: React.FC = () => {
       </div>
 
       {/* Setup Guide Steps */}
-      <div className="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+      <div className="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
         <div className="bg-slate-50 dark:bg-slate-800/50 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700/60">
           <div className="font-bold text-slate-900 dark:text-slate-100 mb-1">
             1. Android Studio Project
@@ -213,6 +214,16 @@ export const AndroidCodeExport: React.FC = () => {
           </div>
           <p className="text-slate-500 dark:text-slate-400 leading-normal">
             Disable battery optimization for this app so Android does not put the NotificationListener to sleep while running continuously.
+          </p>
+        </div>
+
+        <div className="bg-slate-50 dark:bg-slate-800/50 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700/60">
+          <div className="font-bold text-slate-900 dark:text-slate-100 mb-1 flex items-center justify-between">
+            <span>4. Auto APK Build</span>
+            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-semibold">CI/CD</span>
+          </div>
+          <p className="text-slate-500 dark:text-slate-400 leading-normal">
+            Push code to GitHub with <code className="font-mono text-blue-600 dark:text-blue-400">.github/workflows/build-apk.yml</code>. GitHub Actions will build and upload the debug APK automatically.
           </p>
         </div>
       </div>

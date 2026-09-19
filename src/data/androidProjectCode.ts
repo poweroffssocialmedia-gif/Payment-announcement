@@ -1,8 +1,8 @@
 export interface AndroidFile {
   name: string;
   path: string;
-  language: 'java' | 'kotlin' | 'xml' | 'groovy';
-  category: 'java' | 'kotlin' | 'config';
+  language: 'java' | 'kotlin' | 'xml' | 'groovy' | 'yaml';
+  category: 'java' | 'kotlin' | 'config' | 'ci';
   description: string;
   content: string;
 }
@@ -361,6 +361,46 @@ dependencies {
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 }
+`,
+  },
+  {
+    name: 'build-apk.yml',
+    path: '.github/workflows/build-apk.yml',
+    language: 'yaml',
+    category: 'ci',
+    description: 'GitHub Actions workflow to automatically build and export PaymentAnnouncer-Debug-APK artifact with JDK 17 on push or workflow_dispatch.',
+    content: `name: Build APK
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Grant Execute Permission for Gradlew
+        run: chmod +x gradlew
+
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: PaymentAnnouncer-Debug-APK
+          path: app/build/outputs/apk/debug/*.apk
 `,
   },
   {
